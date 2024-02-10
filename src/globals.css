@@ -1,0 +1,21 @@
+.add-note-button {
+  @apply flex items-center rounded-full bg-slate-950 p-5 leading-3 text-slate-50;
+}
+
+.cards-container {
+  @apply mt-20 grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+}
+.card {
+  @apply flex h-80 cursor-pointer flex-col items-start rounded-2xl border-2 border-b-8 border-slate-50/0 p-5 pb-4 duration-100 hover:border-2 hover:border-b-8 hover:border-slate-950/20 hover:transition-all;
+}
+.date {
+  @apply rounded-full text-xs font-bold leading-3 text-slate-950/50;
+}
+
+.overlay {
+  @apply fixed inset-0 z-10 flex items-center justify-center bg-slate-950 bg-opacity-50;
+}
+
+.modal {
+  @apply fixed inset-0 ml-auto flex w-2/6 items-center justify-center bg-slate-50;
+}
