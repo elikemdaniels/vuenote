@@ -70,12 +70,12 @@ const deleteNote = (id) => {
     <div v-if="showModal" class="overlay">
       <div class="modal flex flex-col p-[4%]">
         <textarea
-          v-model="newNote"
+          v-model.trim="newNote"
           class="h-40 w-full rounded-2xl border border-slate-400"
           name="note"
           id="note"
         ></textarea>
-        <p class="text-red-600">{{ errorMessage }}</p>
+        <p v-if="errorMessage" class="text-red-600">{{ errorMessage }}</p>
         <button
           @click="addNote"
           class="mt-5 w-full rounded-2xl bg-slate-950 p-4 text-slate-50"
