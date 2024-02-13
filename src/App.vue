@@ -27,20 +27,35 @@ const formattedDate = () => {
   return new Intl.DateTimeFormat('en-US', options).format(date);
 };
 
-// Add note function
-const addNote = () => {
-  if (newNote.value.length < 10) {
-    return (errorMessage.value = 'Note must be at least 10 characters');
+// Add empty note function
+const addEmptyNote = () => {
+  notes.value.push({
+    id: Math.floor(Math.random() * 1000000),
+    text: '',
+    date: formattedDate(),
+    backgroundColour: getRandomColour(),
+    isEditing: true,
+    deleteButton: false,
+  });
+};
+
+// Save note function
+const saveNote = (note) => {
+  if (note.text.length < 10) {
+    alert('Note must be at least 10 characters'); // Simple alert for validation message
   } else {
-    notes.value.push({
-      id: Math.floor(Math.random() * 1000000),
-      text: newNote.value,
-      date: formattedDate(),
-      backgroundColour: getRandomColour(),
-      deleteButton: false,
-    });
-    resetStates();
+    note.isEditing = false;
   }
+};
+
+// Edit note function
+const editNote = (note) => {
+  note.isEditing = true;
+};
+
+// Delete note from the array
+const deleteNote = (id) => {
+  notes.value = notes.value.filter((note) => note.id !== id);
 };
 
 // Show delete button per note
@@ -52,44 +67,16 @@ const showDeleteButton = (note) => {
 const hideDeleteButton = (note) => {
   note.deleteButton = false;
 };
-
-// Delete note from the array
-const deleteNote = (id) => {
-  notes.value = notes.value.filter((note) => note.id !== id);
-};
 </script>
 
 <template>
   <main class="container mx-auto max-w-7xl px-12">
     <header class="flex items-center justify-between py-8">
       <h1 class="text-6xl font-bold">Vuenotes</h1>
-      <button @click="showModal = true" class="add-note-button">
+      <button @click="addEmptyNote" class="add-note-button">
         <i class="pi pi-plus"></i>
       </button>
     </header>
-    <div v-if="showModal" class="overlay">
-      <div class="modal flex flex-col p-[4%]">
-        <textarea
-          v-model.trim="newNote"
-          class="h-40 w-full rounded-2xl border border-slate-400"
-          name="note"
-          id="note"
-        ></textarea>
-        <p v-if="errorMessage" class="text-red-600">{{ errorMessage }}</p>
-        <button
-          @click="addNote"
-          class="mt-5 w-full rounded-2xl bg-slate-950 p-4 text-slate-50"
-        >
-          Add note
-        </button>
-        <button
-          @click="showModal = false"
-          class="mt-5 w-full rounded-2xl border border-slate-300 bg-slate-50 p-4 text-slate-950"
-        >
-          Close
-        </button>
-      </div>
-    </div>
     <div v-if="notes.length >= 1" class="cards-container">
       <div
         @mouseover="showDeleteButton(note)"
@@ -99,14 +86,41 @@ const deleteNote = (id) => {
         :key="note.id"
         :style="{ background: note.backgroundColour }"
       >
-        <p class="note">{{ note.text }}</p>
+        <div class="flex min-h-full w-full flex-col" v-if="note.isEditing">
+          <textarea
+            v-model="note.text"
+            class="note-textarea h-[80%] bg-transparent"
+          ></textarea>
+
+          <div class="card-footer">
+            <p @click="saveNote(note)" class="text-sm font-semibold">
+              Save note
+            </p>
+            <button
+              v-if="note.deleteButton"
+              @click.stop="deleteNote(note.id)"
+              class="delete-note-button"
+            >
+              <i class="pi pi-trash"></i>
+            </button>
+          </div>
+        </div>
         <div
-          class="card-footer mt-auto flex w-full items-center justify-between"
+          class="flex min-h-full w-full flex-col"
+          v-else
+          @click="editNote(note)"
         >
-          <p class="date">{{ note.date }}</p>
-          <button v-if="note.deleteButton" @click="deleteNote(note.id)">
-            <i class="pi pi-trash"></i>
-          </button>
+          <p class="note-text h-[80%] overflow-y-auto">{{ note.text }}</p>
+          <div class="card-footer">
+            <p class="text-sm font-semibold">{{ note.date }}</p>
+            <button
+              v-if="note.deleteButton"
+              @click.stop="deleteNote(note.id)"
+              class="delete-note-button"
+            >
+              <i class="pi pi-trash"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
