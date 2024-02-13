@@ -1,16 +1,16 @@
 <script setup>
 import { ref } from 'vue';
-const showModal = ref(false);
-const newNote = ref('');
-const errorMessage = ref('');
+// const showModal = ref(false);
+// const newNote = ref('');
+// const errorMessage = ref('');
 const notes = ref([]);
 
 // Reset state function
-const resetStates = () => {
-  showModal.value = false;
-  newNote.value = '';
-  errorMessage.value = '';
-};
+// const resetStates = () => {
+//   showModal.value = false;
+//   newNote.value = '';
+//   errorMessage.value = '';
+// };
 
 // Generate random HSL light background colours
 const getRandomColour = () => {
@@ -70,7 +70,7 @@ const hideDeleteButton = (note) => {
 </script>
 
 <template>
-  <main class="container mx-auto max-w-7xl px-12">
+  <div class="container mx-auto max-w-7xl px-12">
     <header class="flex items-center justify-between py-8">
       <h1 class="text-6xl font-bold">Vuenotes</h1>
       <button @click="addEmptyNote" class="add-note-button">
@@ -128,5 +128,5 @@ const hideDeleteButton = (note) => {
       <h2 class="mt-20 text-2xl">No added note</h2>
       <p>Add a new note</p>
     </div>
-  </main>
+  </div>
 </template>
